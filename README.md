@@ -1,2 +1,5 @@
-# orm-deep-dive
-ORM Deep Dive Tutorial
+# ORM Deep Dive Tutorial
+
+## Tasks
+
+- Create django project
