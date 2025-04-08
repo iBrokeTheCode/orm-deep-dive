@@ -8,11 +8,12 @@ from core.models import Rating, Restaurant
 def run():
     restaurant = Restaurant.objects.first()
     user = User.objects.first()
-    rating, created = Rating.objects.get_or_create(
+    rating = Rating(
         restaurant=restaurant,
         user=user,
-        rating=3
+        rating=20
     )
+    rating.full_clean()
+    rating.save()
 
-    pprint(f'{rating} - {created}')
     pprint(connection.queries)
