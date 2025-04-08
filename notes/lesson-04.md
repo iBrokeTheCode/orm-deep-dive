@@ -92,7 +92,8 @@ def index(request):
     return render(request, 'core/index.html', context)
 ```
 
-> [!WARNING] > `save` method must be used with `ModelForms`. Don't use it in not `ModelForms` (form.cleaned_data)
+> [!WARNING]
+> The `save` method must be used with `ModelForms`. Don't use it in not `ModelForms` (form.cleaned_data)
 
 ### Custom Validators
 
