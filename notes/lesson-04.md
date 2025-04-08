@@ -3,6 +3,7 @@
 ## Covered Concepts
 
 - [Django Validators](#django-validators)
+- [Test with Forms]
 
 ## Reference
 
@@ -49,4 +50,45 @@ def run():
 
 > [!TIP]
 > This following statements will raise errors (from validators) by using `full_clean` method
-> `Call clean_fields(), clean(), validate_unique(), and validate_constraints() on the model. Raise a ValidationError for any errors that occur.`
+> | `Call clean_fields(), clean(), validate_unique(), and validate_constraints() on the model. Raise a ValidationError for any errors that occur.`
+
+### Test with Forms
+
+Create a `ModelForm`
+
+```python
+# forms.py
+from django import forms
+
+from .models import Rating
+
+# NOTE: It also work with normal forms (not ModelForm). You must pass the validators here
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ('restaurant', 'user', 'rating')
+```
+
+Create a view (also other steps like `urls.py`, templates, etc.)
+
+```python
+from django.shortcuts import render
+
+from .forms import RatingForm
+
+def index(request):
+    if request.method == 'POST':
+        form = RatingForm(request.POST or None)
+
+        if form.is_valid():
+            form.save()
+        else:
+            return render(request, 'core/index.html', {'form': form})
+    context = {
+        'form': RatingForm()
+    }
+
+    return render(request, 'core/index.html', context)
+```
+
+> [!WARNING] > `save` method must be used with `ModelForms`. Don't use it in not `ModelForms` (form.cleaned_data)
