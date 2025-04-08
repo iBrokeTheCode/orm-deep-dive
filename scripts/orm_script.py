@@ -1,14 +1,18 @@
-from django.utils import timezone
+from django.db import connection
+from django.contrib.auth.models import User
+from pprint import pprint
 
-from core.models import Restaurant
+from core.models import Rating, Restaurant
 
 
 def run():
-    restaurant = Restaurant()
-    restaurant.name = 'My Restaurant'
-    restaurant.date_opened = timezone.now()
-    restaurant.latitude = -50.25
-    restaurant.longitude = -28.75
-    restaurant.restaurant_type = Restaurant.TypeChoices.ITALIAN
+    restaurant = Restaurant.objects.first()
+    user = User.objects.first()
+    rating, created = Rating.objects.get_or_create(
+        restaurant=restaurant,
+        user=user,
+        rating=3
+    )
 
-    restaurant.save()
+    pprint(f'{rating} - {created}')
+    pprint(connection.queries)
