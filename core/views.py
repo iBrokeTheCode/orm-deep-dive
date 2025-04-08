@@ -1,18 +1,18 @@
 from django.shortcuts import render
 
-from .forms import RatingForm
+from .forms import RatingForm, RestaurantForm
 
 
 def index(request):
     if request.method == 'POST':
-        form = RatingForm(request.POST or None)
+        form = RestaurantForm(request.POST or None)
 
         if form.is_valid():
-            form.save()
+            print(form.cleaned_data)
         else:
             return render(request, 'core/index.html', {'form': form})
     context = {
-        'form': RatingForm()
+        'form': RestaurantForm()
     }
 
     return render(request, 'core/index.html', context)

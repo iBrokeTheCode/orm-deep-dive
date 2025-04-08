@@ -3,7 +3,8 @@
 ## Covered Concepts
 
 - [Django Validators](#django-validators)
-- [Test with Forms]
+- [Test with Forms](#test-with-forms)
+- [Custom Validators](#custom-validators)
 
 ## Reference
 
@@ -92,3 +93,47 @@ def index(request):
 ```
 
 > [!WARNING] > `save` method must be used with `ModelForms`. Don't use it in not `ModelForms` (form.cleaned_data)
+
+### Custom Validators
+
+Create a custom validator (function)
+
+```python
+# models.py
+from django.core.exceptions import ValidationError
+
+
+def start_with_a_validator(name: str):
+    if not name.lower().startswith('a'):
+        raise ValidationError('Restaurant name must start with a')
+```
+
+Add it to the field
+
+```python
+# models.py
+
+# ...
+class Restaurant(models.Model):
+    name = models.CharField(max_length=100, validators=[
+                            start_with_a_validator])
+```
+
+Test it with your form
+
+```python
+# views.py
+def index(request):
+    if request.method == 'POST':
+        form = RestaurantForm(request.POST or None)
+
+        if form.is_valid():
+            print(form.cleaned_data)
+        else:
+            return render(request, 'core/index.html', {'form': form})
+    context = {
+        'form': RestaurantForm()
+    }
+
+    return render(request, 'core/index.html', context)
+```
