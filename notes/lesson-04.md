@@ -53,6 +53,21 @@ def run():
 > This following statements will raise errors (from validators) by using `full_clean` method
 > | `Call clean_fields(), clean(), validate_unique(), and validate_constraints() on the model. Raise a ValidationError for any errors that occur.`
 
+```python
+def run():
+    restaurant = Restaurant.objects.first()
+    user = User.objects.first()
+    rating = Rating(
+        restaurant=restaurant,
+        user=user,
+        rating=20
+    )
+    rating.full_clean()
+    rating.save()
+
+    pprint(connection.queries)
+```
+
 ### Test with Forms
 
 Create a `ModelForm`
