@@ -106,3 +106,44 @@ def run():
     restaurants = Restaurant.objects.order_by(
         Lower('name'))  # SQL: ORDER BY ... LOWER ... ASC
 ```
+
+**index and slicing**
+
+```py
+def run():
+    restaurants = Restaurant.objects.all()[0]  # LIMIT 1
+    restaurants = Restaurant.objects.all()[:5]  # LIMIT 5
+    restaurants = Restaurant.objects.all()[2:5]  # LIMIT 3 OFFSET 2
+```
+
+**ordering in Meta**
+
+```py
+from django.db.models.functions import Lower
+
+class Restaurant(models.Model):
+    class Meta:
+        ordering = (Lower('name'), )
+```
+
+**earliest and latest**
+
+```py
+# orm_script.py
+def run():
+    restaurants = Restaurant.objects.earliest('date_opened')
+    restaurants = Restaurant.objects.latest('date_opened')
+
+# models.py
+class Restaurant(models.Model):
+    class Meta:
+        get_latest_by = ('date_opened')
+```
+
+**Querying by foreign keys**
+
+```py
+def run():
+    restaurants = Sale.objects.filter(restaurant__name__startswith='C')
+    print(restaurants)
+```

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
+from django.db.models.functions import Lower
 
 
 def start_with_a_validator(name: str):
@@ -18,6 +19,10 @@ class Restaurant(models.Model):
         MEXICAN = ('MX', 'Mexican')
         FAST_FOOD = ('FF', 'Fast Food')
         OTHER = ('OT', 'Other')
+
+    class Meta:
+        ordering = (Lower('name'), )
+        get_latest_by = ('date_opened')
 
     name = models.CharField(max_length=100, validators=[
                             start_with_a_validator])

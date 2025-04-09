@@ -7,11 +7,7 @@ from core.models import Restaurant, Rating, Sale
 
 
 def run():
-    restaurants = Restaurant.objects.order_by(
-        Lower('name'))  # SQL: ORDER BY ... LOWER ... ASC
-
+    restaurants = Sale.objects.filter(restaurant__name__startswith='C')
     print(restaurants)
 
     pprint(connection.queries)
-
-# Lower
