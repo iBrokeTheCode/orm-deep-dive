@@ -1,14 +1,17 @@
 from django.db import connection
 from pprint import pprint
 
+from django.db.models.functions import Lower
+
 from core.models import Restaurant, Rating, Sale
 
 
 def run():
-    restaurant_count = Restaurant.objects.count()
-    rating_count = Rating.objects.count()
-    sale_count = Sale.objects.count()
+    restaurants = Restaurant.objects.order_by(
+        Lower('name'))  # SQL: ORDER BY ... LOWER ... ASC
 
-    pprint(f'{restaurant_count=}, {rating_count=}, {sale_count=}')
+    print(restaurants)
 
     pprint(connection.queries)
+
+# Lower
