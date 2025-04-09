@@ -5,7 +5,7 @@ from core.models import Restaurant
 
 
 def run():
-    restaurants = Restaurant.objects.all()
-    restaurants.update(website='http://example.com')
+    restaurant = Restaurant.objects.get(id=1)
+    pprint(restaurant.delete())
 
     pprint(connection.queries)

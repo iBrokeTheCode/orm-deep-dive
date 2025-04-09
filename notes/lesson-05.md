@@ -3,6 +3,8 @@
 ## Covered Concepts
 
 - [Update records](#update-records)
+- [Field Lookups](#field-lookups)
+- [Delete records](#delete-records)
 
 ## Reference
 
@@ -55,4 +57,52 @@ def run():
     restaurants.update(website='http://example.com')
 
     pprint(connection.queries)
+```
+
+> [!NOTE]
+> The `update` method is more efficient that iterate and call `save` method (each `save` execute an SQL query)
+> The `update` method don't run the overwrite login in `save` method
+> The `update` method returns the number of affected records in database
+
+### Field Lookups
+
+Review [documentation](https://docs.djangoproject.com/en/5.2/topics/db/queries/#field-lookups)
+
+```py
+
+def run():
+    restaurants = Restaurant.objects.filter(name__icontains='restaurant')
+    restaurants = Restaurant.objects.filter(name__startswith='restaurant')
+    restaurants = Restaurant.objects.filter(name__iexact='restaurant')
+    pprint(restaurants)
+
+
+    pprint(connection.queries)
+```
+
+### Delete records
+
+> [!WARNING]
+> The `delete` method returns the total number of affected records and a dictionary with models and record affected.
+> Be careful with the `on_delete` property. In `CASCADE` the foreign key relationships will be deleted (first child then parent)
+> In `SET_NULL`, the foreign key relationship will be set to null value.
+
+```py
+# orm_script.py
+def run():
+    restaurant = Restaurant.objects.get(id=1)
+    pprint(restaurant.delete())
+
+    pprint(connection.queries)
+```
+
+```shell
+(2, {'core.Rating': 1, 'core.Restaurant': 1})
+```
+
+```py
+# orm_script.py
+def run():
+    # Deletes all Restaurant instances
+    restaurants = Restaurant.objects.all().delete()
 ```
