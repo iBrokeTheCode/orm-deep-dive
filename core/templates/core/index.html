@@ -6,9 +6,13 @@
     <title>Home</title>
   </head>
   <body>
-    <form action="" method="post">
-      {% csrf_token %} {{ form.as_p }}
-      <button type="submit">Save</button>
-    </form>
+    <ul>
+      {% for restaurant in restaurants %}
+      <li>{{ restaurant.name }}</li>
+
+      {% for rating in restaurant.ratings.all %}
+      <p>{{ rating.rating }}</p>
+      {% endfor %} {% endfor %}
+    </ul>
   </body>
 </html>

@@ -11,3 +11,5 @@ def run():
     print(restaurants)
 
     pprint(connection.queries)
+
+# django debug toolbar
