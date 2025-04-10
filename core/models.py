@@ -47,7 +47,10 @@ class Restaurant(models.Model):
 
 class Staff(models.Model):
     name = models.CharField(max_length=128)
-    restaurants = models.ManyToManyField(Restaurant)
+    restaurants = models.ManyToManyField(Restaurant, related_name='staff')
+
+    def __str__(self):
+        return self.name
 
 
 class Rating(models.Model):
