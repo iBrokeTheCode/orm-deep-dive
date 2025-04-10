@@ -62,6 +62,14 @@ The basic steps to install and setup it are:
 
 ### N+1 Problem
 
+The N+1 problem in Django ORM occurs when your application makes more database queries than necessary to fetch related data.
+
+- You make one initial query to get a list of objects (let's say, 'N' objects like restaurants).
+- Then, for each of those 'N' objects, your code tries to fetch related information (like ratings for each restaurant) using separate individual queries.
+- This results in a total of 1 (initial query) + N (additional queries), hence the name N+1 problem.
+- This can lead to performance issues and slow down your application, especially with a large number of related objects.
+- Django provides tools like `prefetch_related` and `select_related` to optimize these queries and avoid the N+1 problem
+
 > [!NOTE]
 > N+1 Problem is
 > In this case, many queries are executed (most of them are very similar and only change the ID)
@@ -111,6 +119,7 @@ Review [documentation](https://docs.djangoproject.com/en/5.2/ref/models/queryset
 > With `prefetch_related` the number of queries is reduced to only 2.
 > It change the query to **IN** statement.
 > From parent to child model (Restaurant > Ratings)
+> Suitable for one-to-many (reverse foreign key) and many-to-many.
 
 ```py
 def index(request):
@@ -131,6 +140,7 @@ Review [documentation](https://docs.djangoproject.com/en/5.2/ref/models/queryset
 > With `select_related` the number of queries is reduced to only 1.
 > It changes the query to **INNER JOIN** statement
 > From child to parent model (Rating > Restaurant)
+> Suitable for one-to-one and one-to-many
 
 ```py
 def index(request):
@@ -185,3 +195,40 @@ def index(request):
 ### Prefetch objects
 
 Review [documentation](https://docs.djangoproject.com/en/5.1/ref/models/querysets/#django.db.models.Prefetch)
+
+```py
+from django.db.models import Sum
+
+def index(request):
+    # Get all 5-star ratings, and fetch all the sales for restaurants with 5-star ratings.
+    restaurants = Restaurant.objects \
+        .prefetch_related('ratings', 'sales') \
+        .filter(ratings__rating=5) \
+        .annotate(total=Sum('sales__income'))
+
+    print(restaurants)
+
+    return render(request, 'core/index.html')
+```
+
+The Prefetch object allows us to execute custom logic. For example, without it the query got the total of all sales. By adding the Prefetch object, can also filter and get the total sales of the last month.
+
+```py
+def index(request):
+    # Get all 5-star ratings, and fetch all the sales for restaurants with 5-star ratings in the last month
+    month_ago = timezone.now() - timezone.timedelta(days=30)
+    monthly_sales = Prefetch(
+        'sales',
+        queryset=Sale.objects.filter(datetime__gte=month_ago)
+    )
+
+    restaurants = Restaurant.objects.prefetch_related(
+        'ratings', monthly_sales).filter(ratings__rating=5)
+    restaurants = restaurants.annotate(total=Sum('sales__income'))
+    # print([r.total for r in restaurants])
+    print([getattr(r, 'total', None) for r in restaurants])
+
+    print(restaurants)
+
+    return render(request, 'core/index.html')
+```
