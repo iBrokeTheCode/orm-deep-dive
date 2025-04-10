@@ -47,10 +47,17 @@ class Restaurant(models.Model):
 
 class Staff(models.Model):
     name = models.CharField(max_length=128)
-    restaurants = models.ManyToManyField(Restaurant, related_name='staff')
+    restaurants = models.ManyToManyField(
+        Restaurant, related_name='staff', through='StaffRestaurants')
 
     def __str__(self):
         return self.name
+
+
+class StaffRestaurants(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    salary = models.FloatField(null=True)
 
 
 class Rating(models.Model):
