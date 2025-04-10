@@ -2,18 +2,15 @@ from django.db import connection
 
 from pprint import pprint
 
-from core.models import Staff, Restaurant
+from core.models import Staff, Restaurant, StaffRestaurants
 
 
 def run():
-    pass
+    staff = Staff.objects.first()
+    restaurant = Restaurant.objects.get(id=7)
 
+    staff.restaurants.add(restaurant, through_defaults={'salary': 67_000})
+    print(staff.restaurants.all())
 
-# Add salary field to M2M relationship / through
-# Delete db/ migrations and cache
-# Repopulate
-# Create associations with the new table
-# Same methods
-# add method set null value in salary / through_defaults = {'salary': 28_000}
-# set 10 items
-# prefetch
+    # set 10 items
+    # prefetch
