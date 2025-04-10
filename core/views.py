@@ -16,7 +16,7 @@ def index(request):
     restaurants = Restaurant.objects.prefetch_related(
         'ratings', monthly_sales).filter(ratings__rating=5)
     restaurants = restaurants.annotate(total=Sum('sales__income'))
-    print([r.total for r in restaurants])
+    print([getattr(r, 'total', None) for r in restaurants])
 
     print(restaurants)
 
