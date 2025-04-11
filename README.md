@@ -13,6 +13,7 @@
 - Lesson 09: [Django Aggregation & Annotation / values() and values_list() functions](./notes/lesson-09.md)
 - Lesson 10: [Django - F Expressions for database-level operations](./notes/lesson-10.md)
 - Lesson 11: [Django Q Objects / Filtering with OR and NOT Conditions / Pattern Matching and Regex Lookups](./notes/lesson-11.md)
+- Lesson 12: [Django - COALESCE Function and Handling NULL Values in the Database](./notes/lesson-12.md)
 
 ## Helper
 

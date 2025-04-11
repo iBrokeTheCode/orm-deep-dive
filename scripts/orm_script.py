@@ -2,15 +2,20 @@ from pprint import pprint
 import random
 
 from django.db import connection
-from django.db.models import F, Count, Q
+from django.db.models import F, Count, Q, Sum
+from django.db.models.functions import Coalesce
 
 from core.models import Staff, Restaurant, Rating, Sale
 
 
 def run():
-    # has_a_number = Q(name__icontains=r'[0-9]+')
-    restaurants = Restaurant.objects.filter(
-        name__regex=r'[0-9]+').count()
-    print(restaurants)
+    restaurant = Restaurant.objects.first()
 
-    pprint(connection.queries)
+    if restaurant:
+        restaurant.nickname = 'Cool nickname'
+        restaurant.save()
+    nicknames = Restaurant.objects.annotate(
+        new_field=Coalesce(F('nickname'), F('name'))).values('new_field')
+    print(nicknames)
+
+    # pprint(connection.queries)

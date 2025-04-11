@@ -36,6 +36,8 @@ class Restaurant(models.Model):
     )
     restaurant_type = models.CharField(
         max_length=2, choices=TypeChoices.choices)
+    capacity = models.PositiveSmallIntegerField(null=True)
+    nickname = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.name
