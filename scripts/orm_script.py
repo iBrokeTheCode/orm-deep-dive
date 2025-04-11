@@ -1,21 +1,18 @@
-from django.db import connection
-from django.db.models import Count, Avg, Sum, Min, Max
+from pprint import pprint
+import random
 
-from django.utils import timezone
+from django.db import connection
+from django.db.models import F
+
 
 from core.models import Staff, Restaurant, Rating, Sale
 
 
 def run():
-    last_month = timezone.now() - timezone.timedelta(days=31)
+    sales = Sale.objects.all()
+    for sale in sales:
+        from decimal import Decimal
+        sale.expenditure = Decimal(random.uniform(5, 100))
+    Sale.objects.bulk_update(sales, ['expenditure'])
 
-    sales = Sale.objects.filter(datetime__gte=last_month).aggregate(
-        minimum=Min('income'),
-        maximum=Max('income'),
-        avg=Avg('income'),
-        sum=Sum('income'),
-        count=Count('id'),
-    )
-    print(sales)
-
-    print(connection.queries)
+    pprint(connection.queries)

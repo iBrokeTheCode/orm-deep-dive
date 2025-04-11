@@ -11,6 +11,7 @@
 - Lesson 07: [Django Query Optimization / select_related & prefetch_related / django-debug-toolbar / N+1 Problem](./notes/lesson-07.md)
 - Lesson 08: [Django ManyToManyFields and Through-Models for many-to-many relationships](./notes/lesson-08.md)
 - Lesson 09: [Django Aggregation & Annotation / values() and values_list() functions](./notes/lesson-09.md)
+- Lesson 10: [Django - F Expressions for database-level operations](./notes/lesson-10.md)
 
 ## Helper
 
