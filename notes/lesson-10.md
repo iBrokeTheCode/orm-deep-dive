@@ -2,15 +2,15 @@
 
 ## Covered Concepts
 
-- [F Expressions in Django](#f-expressions-in-django)
-- F Expressions in filter() functions to compare with other column values
-- F Expressions in Django annotate() function
-- F Expressions in Django aggregate() function
-- refresh_from_db() function in Django
+- [F Expressions in Django](#1-f-expressions-in-django)
+- [F Expressions in filter() functions to compare with other column values](#2-f-expressions-in-filter-functions-to-compare-with-other-column-values)
+- [F Expressions in Django annotate() function](#3-f-expressions-in-django-annotate-function)
+- [F Expressions in Django aggregate() function](#4-f-expressions-in-django-aggregate-function)
+- [refresh_from_db() function in Django](#5-refresh_from_db-function-in-django)
 
 ## Reference
 
-### F Expressions in Django
+### 1. F Expressions in Django
 
 Read [documentation](https://docs.djangoproject.com/en/5.2/ref/models/expressions/#f-expressions)
 
@@ -36,9 +36,7 @@ def run():
         rating.rating = F('rating') + 1
         rating.save(update_fields=('rating',))
 
-        print(f"Rating before (in Python object): {rating.rating}") # This will show a CombinedExpression object initially
-        rating.refresh_from_db() # To get the updated value from the database
-        print(f"Rating after (refreshed from DB): {rating.rating}")
+        print(f"Rating before (in Python object): {rating.rating}")
 ```
 
 In this example, `F('rating') + 1` tells the database to update the `rating` field of the selected record to its current value plus one. This operation happens directly in the database.
@@ -78,13 +76,12 @@ In this example, `F('rating') + 1` tells the database to update the `rating` fie
 > [!NOTE]
 > The `bulk_update()` method, is primarily used for updating multiple existing model instances that you have already fetched and modified in Python. You prepare a list of model objects with their new attribute values in Python and then pass this list to `bulk_update()`, along with the fields that need to be updated. The key advantage of `bulk_update()` is that it performs the updates for all the provided objects in a single database query, making it significantly more efficient than calling the `save()` method on each object in a loop
 
-### F Expressions in `filter()` Functions to Compare with Other Column Values
+### 2. F Expressions in `filter()` Functions to Compare with Other Column Values
 
 - F expressions can be used within `filter()` to **compare the values of one model field with another field on the same model**.
 - This comparison happens at the database level, which is more efficient than fetching all objects and performing the comparison in Python.
-- **Example: Finding sales where expenditure is greater than income**
 
-  ```python
+  ```py
   from django.db.models import F
   from your_app.models import Sale
 
@@ -97,7 +94,7 @@ In this example, `F('rating') + 1` tells the database to update the `rating` fie
 
   Here, `expenditure__gt=F('income')` filters the `Sale` objects to find those where the value in the `expenditure` field is greater than the value in the `income` field.
 
-### F Expressions in Django `annotate()` Function
+### 3. F Expressions in Django `annotate()` Function
 
 - F expressions can be used with the `annotate()` function to **add dynamic, calculated fields to your query results**.
 - The calculation is performed at the database level.
@@ -109,18 +106,26 @@ In this example, `F('rating') + 1` tells the database to update the `rating` fie
   from your_app.models import Sale
 
   def run():
-      sales_with_profit = Sale.objects.annotate(profit=F('income') - F('expenditure'))
-      for sale in sales_with_profit:
-          print(f"Sale ID: {sale.id}, Income: {sale.income}, Expenditure: {sale.expenditure}, Profit: {sale.profit}")
+    sales = Sale.objects.annotate(profit=F('income') - F('expenditure'))
+    first_sale = sales.values('income', 'expenditure', 'profit').first()
+    if first_sale:
+        print(first_sale['income'])
+        print(first_sale['expenditure'])
+        print(first_sale['profit'])
+    else:
+        print("No sales records found.")
 
-      most_profitable = Sale.objects.annotate(profit=F('income') - F('expenditure')).order_by('-profit').first()
-      if most_profitable:
-          print(f"Most profitable sale ID: {most_profitable.id}, Profit: {most_profitable.profit}")
+    sales = Sale.objects.annotate(profit=F('income') - F('expenditure'))
+    first = sales.values('profit', 'expenditure',
+                         'income').order_by('-profit').first()
+
+    if first:
+        print(first.get('profit'))
   ```
 
   In this example, `Sale.objects.annotate(profit=F('income') - F('expenditure'))` adds a `profit` attribute to each `Sale` object in the queryset, calculated by subtracting the `expenditure` field's value from the `income` field's value.
 
-### F Expressions in Django `aggregate()` Function
+### 4. F Expressions in Django `aggregate()` Function
 
 - F expressions can be used within the `aggregate()` function, often in conjunction with **Q objects and aggregation functions like `Count`**, to perform conditional aggregations based on comparisons between fields.
 - **Example: Counting the number of sales with profit and loss**
@@ -141,7 +146,7 @@ In this example, `F('rating') + 1` tells the database to update the `rating` fie
 
   Here, we use `aggregate()` with `Count` and `Q` objects. The filters `Q(income__gt=F('expenditure'))` and `Q(income__lt=F('expenditure'))` use F expressions to compare the `income` and `expenditure` fields at the database level before counting the number of sales that meet each condition.
 
-### `refresh_from_db()` Function in Django
+### 5. `refresh_from_db()` Function in Django
 
 - When you use an F expression to update a field and then immediately try to access that field's value on the same model instance in your Python code, you **might not see the updated value immediately**.
 - This is because the update happens at the database level, and the Python object in memory is not automatically refreshed. The attribute might appear as a `CombinedExpression` object.

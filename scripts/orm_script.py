@@ -2,17 +2,19 @@ from pprint import pprint
 import random
 
 from django.db import connection
-from django.db.models import F
-
+from django.db.models import F, Count, Q
 
 from core.models import Staff, Restaurant, Rating, Sale
 
 
 def run():
-    sales = Sale.objects.all()
-    for sale in sales:
-        from decimal import Decimal
-        sale.expenditure = Decimal(random.uniform(5, 100))
-    Sale.objects.bulk_update(sales, ['expenditure'])
+    rating = Rating.objects.get(id=7)
+    if rating:
+        print(rating.rating)
+        rating.rating = F('rating') - 2
+        rating.save()
+        rating.refresh_from_db()
 
-    pprint(connection.queries)
+        print(rating.rating)
+
+    # pprint(connection.queries)
