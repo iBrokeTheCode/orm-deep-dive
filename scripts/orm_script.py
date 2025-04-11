@@ -8,13 +8,9 @@ from core.models import Staff, Restaurant, Rating, Sale
 
 
 def run():
-    rating = Rating.objects.get(id=7)
-    if rating:
-        print(rating.rating)
-        rating.rating = F('rating') - 2
-        rating.save()
-        rating.refresh_from_db()
+    # has_a_number = Q(name__icontains=r'[0-9]+')
+    restaurants = Restaurant.objects.filter(
+        name__regex=r'[0-9]+').count()
+    print(restaurants)
 
-        print(rating.rating)
-
-    # pprint(connection.queries)
+    pprint(connection.queries)

@@ -12,9 +12,10 @@
 - Lesson 08: [Django ManyToManyFields and Through-Models for many-to-many relationships](./notes/lesson-08.md)
 - Lesson 09: [Django Aggregation & Annotation / values() and values_list() functions](./notes/lesson-09.md)
 - Lesson 10: [Django - F Expressions for database-level operations](./notes/lesson-10.md)
+- Lesson 11: [Django Q Objects / Filtering with OR and NOT Conditions / Pattern Matching and Regex Lookups](./notes/lesson-11.md)
 
 ## Helper
 
 ```txt
-Generate the README file (Markdown format) of the source video with the key concepts of the section: ""
+Generate the README file (Markdown format) of the source video with the key concepts and all examples (with code) of the explained topics:
 ```
