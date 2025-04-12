@@ -1,8 +1,7 @@
 from pprint import pprint
-import random
 
 from django.db import connection
-from django.db.models import F, Count, Q, Sum, Case, When, Avg, Value, Min, Max, CharField, Subquery
+from django.db.models import F, Count, Q, Sum, Case, When, Avg, Value, Min, Max, CharField, Subquery, OuterRef, Exists
 from django.db.models.functions import Coalesce
 
 from itertools import count
@@ -12,5 +11,11 @@ from core.models import Staff, Restaurant, Rating, Sale
 
 
 def run():
-    restaurants = Restaurant.objects.filter(restaurant_type__in=('IT', 'CH'))
-    print(restaurants)
+    days_ago = timezone.now() - timezone.timedelta(days=5)
+
+    restaurants = Restaurant.objects.filter(
+        Exists(Sale.objects.filter(
+            restaurant=OuterRef('pk'), datetime__gte=days_ago))
+    )
+
+    print(restaurants.count())
