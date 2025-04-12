@@ -15,6 +15,7 @@
 - Lesson 11: [Django Q Objects / Filtering with OR and NOT Conditions / Pattern Matching and Regex Lookups](./notes/lesson-11.md)
 - Lesson 12: [Django - COALESCE Function and Handling NULL Values in the Database](./notes/lesson-12.md)
 - Lesson 13: [Django Conditional Expressions / Case() and When() objects](./notes/lesson-13.md)
+- Lesson 14: [Django - Subquery, OuterRef and Exists objects for Database SQL Subqueries](./notes/lesson-14.md)
 
 ## Helper
 
