@@ -2,6 +2,7 @@
 
 - Read PostgreSQL Transaction [documentation](https://www.postgresql.org/docs/current/tutorial-transactions.html)
 - Read ACID (Atomic, Constant, Isolated, Durable) [post](https://www.bmc.com/blogs/acid-atomic-consistent-isolated-durable/)
+- Read Django Transaction [documentation](https://docs.djangoproject.com/en/5.2/topics/db/transactions/)
 
 ## Concepts
 
@@ -179,7 +180,7 @@ By wrapping the order creation and stock update within `with transaction.atomic(
 
 ## `atomic_requests` Setting
 
-Django also provides an `ATOMIC_REQUESTS` setting (defaulting to `False`) in your settings file. If set to `True`, it automatically wraps the execution of each Django view in a database transaction. This can be convenient but might not always be the desired behavior for all views.
+Django also provides an `ATOMIC_REQUESTS` setting (defaulting to `False`) in your settings file. If set to `True`, it automatically wraps the execution of each Django view in a database transaction. This can be convenient but might not always be the desired behavior for all views. Review [documentation](https://docs.djangoproject.com/en/5.2/topics/db/transactions/#tying-transactions-to-http-requests)
 
 ## Performing Actions After Commit (`transaction.on_commit()`)
 
@@ -228,7 +229,3 @@ def order_product(request):
 ```
 
 The `email_user` function will only be executed if the entire transaction within the `atomic()` block is successfully committed to the database. We use `functools.partial` to pass arguments to the callback function. If the transaction rolls back (e.g., due to an exception), the `email_user` function will not be called.
-
-## Further Topics (To be covered in a future video)
-
-- **`select_for_update()`:** This Django queryset function allows locking rows in the database until the end of a transaction, which is useful for preventing race conditions in concurrent transactions. This functionality requires a database that supports row-level locking (not SQLite by default).
