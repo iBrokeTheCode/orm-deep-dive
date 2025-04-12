@@ -1,5 +1,7 @@
 # Django Conditional Expressions with Case() and When() Objects
 
+Read [documentation](https://docs.djangoproject.com/en/4.2/ref/models/conditional-expressions/)
+
 ## Concepts
 
 - **Conditional Expressions:** Enable evaluation of conditions for each row in a database table and return a corresponding result expression based on those conditions.
@@ -50,15 +52,15 @@
 - **Corresponding SQL (as seen via `connection.queries`):**
   ```sql
   SELECT ...,
-         CASE
-             WHEN restaurant.restaurant_type = 'italian' THEN 1
-             ELSE 0
-         END AS is_italian
+    CASE
+        WHEN restaurant.restaurant_type = 'italian' THEN 1
+        ELSE 0
+    END AS is_italian
   FROM restaurant
   WHERE CASE
-            WHEN restaurant.restaurant_type = 'italian' THEN 1
-            ELSE 0
-        END = 1
+      WHEN restaurant.restaurant_type = 'italian' THEN 1
+      ELSE 0
+  END = 1
   ```
   The `CASE WHEN` SQL construct directly implements the conditional logic defined in the Django ORM.
 
@@ -198,41 +200,41 @@
   from django.utils import timezone
   from itertools import count
 
-  first_sale = Sale.objects.aggregate(Min('date_time'))['date_time__min']
-  last_sale = Sale.objects.aggregate(Max('date_time'))['date_time__max']
+  first_sale = Sale.objects.aggregate(first_sale_date=Min('datetime'))[
+        'first_sale_date']
+  last_sale = Sale.objects.aggregate(last_dale_date=Max('datetime'))[
+      'last_dale_date']
 
   dates = []
   counter = count(0)
   dt = first_sale
-  if first_sale and last_sale:
-      while dt <= last_sale:
-          dates.append(dt.date())
-          dt = first_sale + timezone.timedelta(days=10 * next(counter))
 
-  wins = [
+  while (dt := first_sale + timezone.timedelta(days=10*next(counter))) <= last_sale:
+      dates.append(dt)
+
+  whens = [
       When(
-          date_time__range=(date, date + timezone.timedelta(days=10)),
-          then=Value(date.strftime('%Y-%m-%d'))
+          datetime__range=(dt, dt + timezone.timedelta(days=10)),
+          then=Value(dt.date())
       )
-      for date in dates
+      for dt in dates
   ]
 
-  case = Case(*wins, output_field=CharField())
+  case = Case(*whens, output_field=CharField())
 
   sales_by_date_range = Sale.objects.annotate(
       date_range=case
   ).values('date_range').annotate(total_sales=Sum('income')).order_by('date_range')
 
   for item in sales_by_date_range:
-      print(f"Date Range: {item['date_range']}, Total Sales: {item['total_sales']}")
+      print(
+          f"Date Range: {item['date_range']}, Total Sales: {item['total_sales']}")
   ```
 
 - **Explanation:**
   - We first find the minimum (`first_sale`) and maximum (`last_sale`) dates from the `Sale` model.
   - We generate a list of dates (`dates`) with 10-day intervals starting from `first_sale` up to `last_sale` using `itertools.count` and `timezone.timedelta`.
-  - We create a list comprehension `wins` that generates a `When()` object for each date in our `dates` list. Each `When()` checks if the `date_time` of a sale falls within a 10-day range starting from that date. If it does, it returns the starting date as a string.
-  - We create a `Case()` expression by unpacking the `wins` list using `*wins`. The `output_field` is set to `CharField()`.
+  - We create a list comprehension `whens` that generates a `When()` object for each date in our `dates` list. Each `When()` checks if the `date_time` of a sale falls within a 10-day range starting from that date. If it does, it returns the starting date as a string.
+  - We create a `Case()` expression by unpacking the `whens` list using `*whens`. The `output_field` is set to `CharField()`.
   - We annotate the `Sale` objects with the `date_range` using our `Case()` expression.
   - Finally, we group the sales by `date_range` using `.values('date_range')` and calculate the `total_sales` for each range using `Sum('income')`.
-
-This README provides a comprehensive overview of Django conditional expressions using `Case()` and `When()` as explained in the BugBytes video, along with detailed code examples. Remember to adapt the model and field names to your specific Django project.
