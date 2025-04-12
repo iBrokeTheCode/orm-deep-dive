@@ -1,6 +1,6 @@
 # Django Conditional Expressions with Case() and When() Objects
 
-Read [documentation](https://docs.djangoproject.com/en/4.2/ref/models/conditional-expressions/)
+Read [documentation](https://docs.djangoproject.com/en/5.2/ref/models/conditional-expressions/)
 
 ## Concepts
 
