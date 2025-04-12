@@ -100,7 +100,7 @@ def order_product(request):
     else:
         form = ProductOrderForm()
     context = {'form': form}
-    return render(request, 'order.html', context)
+    return render(request, 'order_product.html', context)
 ```
 
 This approach has a critical flaw: if the server crashes between saving the `Order` and updating the `Product`'s stock, the database will be inconsistent.
