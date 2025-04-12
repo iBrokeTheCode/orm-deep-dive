@@ -16,9 +16,10 @@
 - Lesson 12: [Django - COALESCE Function and Handling NULL Values in the Database](./notes/lesson-12.md)
 - Lesson 13: [Django Conditional Expressions / Case() and When() objects](./notes/lesson-13.md)
 - Lesson 14: [Django - Subquery, OuterRef and Exists objects for Database SQL Subqueries](./notes/lesson-14.md)
+- Lesson 15: [Django Database Transactions / atomic() function](./notes/lesson-15.md)
 
 ## Helper
 
 ```txt
-Generate the README file (Markdown format) of the source video with the key concepts and all examples (with code) of the explained topics:
+Generate the README file (Markdown format) of the source video with the key concepts and all examples (with code) of the explained topics
 ```
