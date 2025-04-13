@@ -17,6 +17,7 @@
 - Lesson 13: [Django Conditional Expressions / Case() and When() objects](./notes/lesson-13.md)
 - Lesson 14: [Django - Subquery, OuterRef and Exists objects for Database SQL Subqueries](./notes/lesson-14.md)
 - Lesson 15: [Django Database Transactions / atomic() function](./notes/lesson-15.md)
+- Lesson 16: [Django - select_for_update() function / Locking Database Rows](./notes/lesson-16.md)
 
 ## Helper
 
