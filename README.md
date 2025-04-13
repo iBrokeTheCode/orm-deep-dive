@@ -18,6 +18,7 @@
 - Lesson 14: [Django - Subquery, OuterRef and Exists objects for Database SQL Subqueries](./notes/lesson-14.md)
 - Lesson 15: [Django Database Transactions / atomic() function](./notes/lesson-15.md)
 - Lesson 16: [Django - select_for_update() function / Locking Database Rows](./notes/lesson-16.md)
+- Lesson 17: [Django Content Types framework / ContentType model](./notes/lesson-17.md)
 
 ## Helper
 
