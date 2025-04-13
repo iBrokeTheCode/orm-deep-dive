@@ -4,6 +4,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower
 
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+
 
 def start_with_a_validator(name: str):
     if not name.lower().startswith('a'):
@@ -38,6 +41,7 @@ class Restaurant(models.Model):
         max_length=2, choices=TypeChoices.choices)
     capacity = models.PositiveSmallIntegerField(null=True)
     nickname = models.CharField(max_length=100, blank=True, null=True)
+    comments = GenericRelation('Comment')
 
     def __str__(self):
         return self.name
@@ -69,6 +73,7 @@ class Rating(models.Model):
     rating = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
+    comments = GenericRelation('Comment')
 
     def __str__(self):
         return f'Rating: {self.rating}'
@@ -96,3 +101,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.number_of_items} x {self.product.name}'
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveBigIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')

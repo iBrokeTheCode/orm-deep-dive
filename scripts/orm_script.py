@@ -9,8 +9,12 @@ from django.contrib.contenttypes.models import ContentType
 from itertools import count
 from django.utils import timezone
 
-from core.models import Staff, Restaurant, Rating, Sale
+from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 
 def run():
-    pass
+    restaurant = Restaurant.objects.get(pk=4)
+    restaurant.comments.add(
+        Comment.objects.create(text='I change my mind',
+                               content_object=restaurant)
+    )
