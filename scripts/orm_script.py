@@ -14,12 +14,4 @@ from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 
 def run():
-    user = User.objects.first()
-    restaurant = Restaurant.objects.first()
-
-    rating = Rating.objects.create(
-        user=user, restaurant=restaurant, rating=100
-    )
-    # rating = Rating.objects.update()
-
-    print(rating)
+    pass

@@ -28,6 +28,22 @@ class Restaurant(models.Model):
         ordering = (Lower('name'), )
         get_latest_by = ('date_opened')
 
+        constraints = [
+            models.CheckConstraint(
+                check=Q(latitude__gte=-90) & Q(latitude__lte=90),
+                name='valid_latitude',
+                violation_error_message='Latitude must be between -90 and 90'
+            ),
+            models.CheckConstraint(
+                check=Q(longitude__gte=-180, longitude__lte=180),
+                name='valid_longitude',
+                violation_error_message='Latitude must be between -180 and 180'
+            ),
+            models.UniqueConstraint(
+                Lower('name'), name='restaurant_name_unique_insensitive'
+            )
+        ]
+
     name = models.CharField(max_length=100, validators=[
                             start_with_a_validator])
     website = models.URLField(default='')

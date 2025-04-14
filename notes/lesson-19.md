@@ -1,5 +1,8 @@
 # Django Database Constraints Explained
 
+- Read about [Types of constraints](https://www.ibm.com/docs/en/ias?topic=constraints-types)
+- Review Django Constraints [documentation](https://docs.djangoproject.com/en/5.2/ref/models/constraints/)
+
 ## Concepts
 
 A **database constraint** is a restriction or a limitation on the possible values that can be entered into a particular column or a combination of columns in a database table. Database constraints are crucial for maintaining data integrity and consistency.
@@ -139,7 +142,7 @@ class Restaurant(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(Lower('name'), name='restaurant_name_unique_insensitive')
+            models.UniqueConstraint(Lower('name'), name='restaurant_name_unique_insensitive')
         ]
 ```
 
@@ -166,7 +169,7 @@ class Rating(models.Model):
                 name='rating_value_valid',
                 violation_error_message='Rating invalid. It must fall between 1 and 5'
             ),
-            UniqueConstraint(fields=['user', 'restaurant'], name='user_restaurant_unique')
+            models.UniqueConstraint(fields=['user', 'restaurant'], name='user_restaurant_unique')
         ]
 ```
 
