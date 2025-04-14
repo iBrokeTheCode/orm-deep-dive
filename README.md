@@ -22,6 +22,7 @@
 - Lesson 18: [Generic Foreign Keys in Django / GenericForeignKey / GenericRelation](./notes/lesson-18.md)
 - Lesson 19: [Django - Database Constraints | Unique Constraint | Check Constraint](./notes/lesson-19.md)
 - Lesson 20: [Django Graph Models command - Generate ER Diagrams for your Database](./notes/lesson-20.md)
+- Lesson 21: [Django Proxy Models - Customizing Model Behaviour using Proxy Models!](./notes/lesson-21.md)
 
 ## Helper
 
