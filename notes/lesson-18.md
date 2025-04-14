@@ -194,15 +194,12 @@ def run():
     print(restaurant.comments.count())
 ```
 
-# NOTE: Continues at 21:22
-
 ### `related_query_name`
 
 You can add a `related_query_name` to the `GenericRelation` to use in filtering statements on the related model.
 
-**`models.py` (modified):**
-
 ```py
+# models.py
 class Restaurant(models.Model):
     # ...
     comments = GenericRelation(Comment, related_query_name='restaurant')
@@ -211,15 +208,14 @@ class Restaurant(models.Model):
 
 Now you can filter comments based on the related `Restaurant`'s fields:
 
-**`orm_script.py` (modified):**
-
 ```py
+# orm_script.py
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import get_object_or_404
-from myapp.models import Restaurant, Rating, Comment
+from core.models import Restaurant, Rating, Comment
 
 def run():
-    comments = Comment.objects.filter(restaurant__name='Golden Dragon')
+    comments = Comment.objects.filter(
+        restaurant__restaurant_type=Restaurant.TypeChoices.INDIAN)
     print(comments)
 ```
 
@@ -227,9 +223,8 @@ def run():
 
 You can add related `Comment` objects directly within the admin interface of the `Restaurant` or `Rating` models using **`GenericTabularInline`**.
 
-**`admin.py` (modified):**
-
 ```py
+# admin.py
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib.contenttypes.models import ContentType
@@ -261,4 +256,4 @@ This will add an inline formset for adding comments directly when creating or ed
 
 ## Django Permissions System
 
-Django's built-in permission system utilizes the content types framework and foreign keys to manage permissions for different models. The `Permission` model has a foreign key to the `ContentType` model, linking each permission to a specific model. The `User` and `Group` models have ManyToMany relationships with the `Permission` model, allowing flexible assignment of permissions to users and groups on a per-model basis.
+Django's built-in [permission system](https://docs.djangoproject.com/en/5.2/topics/auth/default/#permissions-and-authorization) utilizes the content types framework and foreign keys to manage permissions for different models. The `Permission` model has a foreign key to the `ContentType` model, linking each permission to a specific model. The `User` and `Group` models have ManyToMany relationships with the `Permission` model, allowing flexible assignment of permissions to users and groups on a per-model basis.

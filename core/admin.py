@@ -1,15 +1,23 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 from .models import Restaurant, Rating, Sale, Product, Order, Comment
 
 
+class CommentInline(GenericTabularInline):
+    model = Comment
+    max_num = 1
+
+
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
+    inlines = (CommentInline, )
 
 
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('id', 'rating')
+    inlines = (CommentInline, )
 
 
 class CommentAdmin(admin.ModelAdmin):

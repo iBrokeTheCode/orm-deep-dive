@@ -13,8 +13,6 @@ from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 
 def run():
-    restaurant = Restaurant.objects.get(pk=4)
-    restaurant.comments.add(
-        Comment.objects.create(text='I change my mind',
-                               content_object=restaurant)
-    )
+    comments = Comment.objects.filter(
+        restaurant__restaurant_type=Restaurant.TypeChoices.INDIAN)
+    print(comments)
