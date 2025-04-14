@@ -20,6 +20,7 @@
 - Lesson 16: [Django - select_for_update() function / Locking Database Rows](./notes/lesson-16.md)
 - Lesson 17: [Django Content Types framework / ContentType model](./notes/lesson-17.md)
 - Lesson 18: [Generic Foreign Keys in Django / GenericForeignKey / GenericRelation](./notes/lesson-18.md)
+- Lesson 19: [Django - Database Constraints | Unique Constraint | Check Constraint](./notes/lesson-19.md)
 
 ## Helper
 
