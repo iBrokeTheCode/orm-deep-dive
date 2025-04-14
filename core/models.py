@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower
+from django.db.models import Q
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -74,6 +75,16 @@ class Rating(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     comments = GenericRelation('Comment')
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name='rating_valid_value',
+                # check=Q(rating__gte=1, rating__lte=5),
+                check=Q(rating__range=(1, 5)),
+                violation_error_message='Invalid rating, It must be between 1 and 5'
+            )
+        ]
 
     def __str__(self):
         return f'Rating: {self.rating}'
