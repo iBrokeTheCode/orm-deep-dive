@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower
-from django.db.models import Q
+from django.db.models import Q, F
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -132,6 +132,11 @@ class Sale(models.Model):
     income = models.DecimalField(max_digits=8, decimal_places=2)
     expenditure = models.DecimalField(max_digits=8, decimal_places=2)
     datetime = models.DateTimeField()
+    profit = models.GeneratedField(
+        expression=F('income') - F('expenditure'),
+        output_field=models.DecimalField(max_digits=8, decimal_places=2),
+        db_persist=True,
+    )
 
 
 class Product(models.Model):

@@ -14,9 +14,10 @@ from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 
 def run():
-    restaurant = Restaurant.objects.last()
-    reference_date = timezone.now() - timezone.timedelta(days=30)
+    sales = Sale.objects.all().order_by('-profit').first()
 
-    if restaurant:
-        print(restaurant.date_opened)
-        print(restaurant.is_open_after(reference_date))
+    if sales:
+        print(sales.profit)
+
+    max_profit = Sale.objects.aggregate(maximum=Max('profit'))
+    print(max_profit)
