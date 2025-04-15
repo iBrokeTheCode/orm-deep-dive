@@ -169,7 +169,7 @@ from datetime import timedelta
 for i in range(1, 6):
     Event.objects.create(
         name=f"Event {i}",
-        start_date=timezone.now() - timedelta(days=i),
+        start_date=timezone.now() - timezone.timedelta(days=i),
         end_date=timezone.now()
     )
 

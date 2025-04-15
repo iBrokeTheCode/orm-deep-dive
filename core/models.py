@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
-from django.db.models.functions import Lower
+from django.db.models.functions import Lower, Greatest
 from django.db.models import Q, F, When, Case, Value
 
 from django.contrib.contenttypes.models import ContentType
@@ -169,3 +169,33 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveBigIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+
+
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+
+    duration = models.GeneratedField(  # type: ignore
+        expression=F('end_date') - F('start_date'),
+        output_field=models.DurationField(),
+        db_persist=True
+    )
+
+    # duration = models.GeneratedField(  # type: ignore
+    #     expression=Greatest(F('end_date') - F('start_date'),
+    #                         F('start_date') - F('end_date')),
+    #     output_field=models.DurationField(),
+    #     db_persist=True
+    # )
+
+    # def clean(self):
+    #     if self.start_date > self.end_date:
+    #         raise ValidationError("Start date must be earlier than end date.")
+
+    @property
+    def duration_in_days(self):
+        return self.duration.days
+
+    def __str__(self) -> str:
+        return self.name

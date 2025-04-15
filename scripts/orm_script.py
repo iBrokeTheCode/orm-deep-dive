@@ -10,16 +10,14 @@ from django.contrib.contenttypes.models import ContentType
 from itertools import count
 from django.utils import timezone
 
-from core.models import Staff, Restaurant, Rating, Sale, Comment
+from core.models import Staff, Restaurant, Rating, Sale, Comment, Event
 
 
 def run():
-    first_sale = Sale.objects.first()
-    if first_sale:
-        print(
-            f"Sale Income: {first_sale.income}, Suggested Tip: {first_sale.suggested_tip}")
+    event = Event.objects.first()
 
-    low_income_sale = Sale.objects.filter(income__lt=10).first()
-    if low_income_sale:
-        print(
-            f"Sale Income: {low_income_sale.income}, Suggested Tip: {low_income_sale.suggested_tip}")
+    if event:
+        print(event.start_date)
+        print(event.end_date)
+        print(event.duration)
+        print(event.duration_in_days)
