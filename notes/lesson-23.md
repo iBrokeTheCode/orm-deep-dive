@@ -104,13 +104,14 @@ class Sale(models.Model):
         output_field=models.DecimalField(max_digits=10, decimal_places=2),
         db_persist=True,
     )
-    suggested_tip = models.GeneratedField(
+    suggested_tip = models.GeneratedField(  # type: ignore
         expression=Case(
-            When(income__gte=10, then=F('income') * Value(0.2)),
-            default=Value(0)
+            When(income__gte=10, then=models.F('income') * 0.2),
+            default=Value(0),
+            output_field=models.DecimalField(max_digits=8, decimal_places=2),
         ),
-        output_field=models.DecimalField(max_digits=10, decimal_places=2),
-        db_persist=True,
+        output_field=models.DecimalField(max_digits=8, decimal_places=2),
+        db_persist=True
     )
 
     def __str__(self):

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower
-from django.db.models import Q, F
+from django.db.models import Q, F, When, Case, Value
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -132,10 +132,19 @@ class Sale(models.Model):
     income = models.DecimalField(max_digits=8, decimal_places=2)
     expenditure = models.DecimalField(max_digits=8, decimal_places=2)
     datetime = models.DateTimeField()
-    profit = models.GeneratedField(
+    profit = models.GeneratedField(  # type: ignore
         expression=F('income') - F('expenditure'),
         output_field=models.DecimalField(max_digits=8, decimal_places=2),
         db_persist=True,
+    )
+    suggested_tip = models.GeneratedField(  # type: ignore
+        expression=Case(
+            When(income__gte=10, then=models.F('income') * 0.2),
+            default=Value(0),
+            output_field=models.DecimalField(max_digits=8, decimal_places=2),
+        ),
+        output_field=models.DecimalField(max_digits=8, decimal_places=2),
+        db_persist=True
     )
 
 

@@ -14,10 +14,12 @@ from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 
 def run():
-    sales = Sale.objects.all().order_by('-profit').first()
+    first_sale = Sale.objects.first()
+    if first_sale:
+        print(
+            f"Sale Income: {first_sale.income}, Suggested Tip: {first_sale.suggested_tip}")
 
-    if sales:
-        print(sales.profit)
-
-    max_profit = Sale.objects.aggregate(maximum=Max('profit'))
-    print(max_profit)
+    low_income_sale = Sale.objects.filter(income__lt=10).first()
+    if low_income_sale:
+        print(
+            f"Sale Income: {low_income_sale.income}, Suggested Tip: {low_income_sale.suggested_tip}")
