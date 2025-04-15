@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
+from django.urls import reverse
 from django.utils import timezone
 from datetime import datetime
 
@@ -75,6 +76,9 @@ class Restaurant(models.Model):
 
     def is_open_after(self, reference_date: datetime):
         return self.date_opened > reference_date
+
+    def get_absolute_url(self):
+        return reverse('core:restaurant_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

@@ -1,5 +1,8 @@
 # Django Model Properties & Methods
 
+- Read [documentation](https://docs.djangoproject.com/en/5.2/topics/db/models/#model-methods)
+- Review related [Django URLs tutorial](https://youtu.be/obRENgwHS7A?si=ChreEXiGTIAKYtB7)
+
 ## Key Concepts
 
 - **Django Model Classes:** These classes serve as an interface to the data used by your application. They are a useful place to define simple logic related to that data through properties and methods.
@@ -193,9 +196,14 @@ class Restaurant(models.Model):
 
 **Using `get_absolute_url()` in a Template:**
 
-```html+django
+```html
 {% for restaurant in restaurants %}
-    <p><a href="{{ restaurant.get_absolute_url }}">View {{ restaurant.name }}</a></p>
+<p>
+  <!--
+  <a href="{% url "core:restaurant_detail" pk=restaurant.id %}">{{ restaurant.name }}</a>
+  -->
+  <a href="{{ restaurant.get_absolute_url }}">View {{ restaurant.name }}</a>
+</p>
 {% endfor %}
 ```
 

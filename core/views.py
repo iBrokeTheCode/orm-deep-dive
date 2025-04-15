@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum, Prefetch
 from django.utils import timezone
 from django.db import transaction
@@ -14,14 +14,13 @@ def email_user(email: str):
 
 
 def index(request):
-    staff_restaurants = StaffRestaurants.objects.prefetch_related(
-        'staff', 'restaurant')
+    restaurants = Restaurant.objects.all()[:5]
 
-    for record in staff_restaurants:
-        print(record.restaurant.name)
-        print(record.staff.name)
+    context = {
+        'restaurants': restaurants
+    }
 
-    return render(request, 'core/index.html')
+    return render(request, 'core/index.html', context)
 
 
 def order_product(request):
@@ -52,3 +51,11 @@ def order_product(request):
     }
 
     return render(request, 'core/order_product.html', context)
+
+
+def restaurant_detail(request, pk):
+    restaurant = get_object_or_404(Restaurant, pk=7)
+    context = {
+        'restaurant': restaurant
+    }
+    return render(request, 'core/restaurant_detail.html', context)

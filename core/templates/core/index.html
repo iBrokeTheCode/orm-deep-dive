@@ -5,5 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
   </head>
-  <body></body>
+  <body>
+    <ul>
+      {% for restaurant in restaurants %}
+      <li><a href="{% url "core:restaurant_detail" pk=restaurant.id %}">{{ restaurant.name }}</a></li>
+      <li><a href="{{ restaurant.get_absolute_url }}">{{ restaurant.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </body>
 </html>
