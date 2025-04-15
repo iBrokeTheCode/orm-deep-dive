@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 from django.utils import timezone
+from datetime import datetime
 
 
 def start_with_a_validator(name: str):
@@ -67,10 +68,13 @@ class Restaurant(models.Model):
         return self.nickname or self.name
 
     @property
-    def was_open_this_year(self):
+    def was_opened_this_year(self):
         current_year = timezone.now().year
 
         return self.date_opened.year == current_year
+
+    def is_open_after(self, reference_date: datetime):
+        return self.date_opened > reference_date
 
     def __str__(self):
         return self.name

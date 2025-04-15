@@ -15,8 +15,8 @@ from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 def run():
     restaurant = Restaurant.objects.last()
+    reference_date = timezone.now() - timezone.timedelta(days=30)
 
     if restaurant:
-        restaurant.date_opened = timezone.datetime(year=2024, month=12, day=12)
         print(restaurant.date_opened)
-        print(restaurant.was_open_this_year)
+        print(restaurant.is_open_after(reference_date))
