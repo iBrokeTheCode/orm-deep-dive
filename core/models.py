@@ -8,6 +8,8 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
+from django.utils import timezone
+
 
 def start_with_a_validator(name: str):
     if not name.lower().startswith('a'):
@@ -63,6 +65,12 @@ class Restaurant(models.Model):
     @property
     def restaurant_name(self) -> str:
         return self.nickname or self.name
+
+    @property
+    def was_open_this_year(self):
+        current_year = timezone.now().year
+
+        return self.date_opened.year == current_year
 
     def __str__(self):
         return self.name

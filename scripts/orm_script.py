@@ -17,6 +17,6 @@ def run():
     restaurant = Restaurant.objects.last()
 
     if restaurant:
-        print(restaurant.name)
-        print(restaurant.nickname)
-        print(restaurant.restaurant_name)
+        restaurant.date_opened = timezone.datetime(year=2024, month=12, day=12)
+        print(restaurant.date_opened)
+        print(restaurant.was_open_this_year)
