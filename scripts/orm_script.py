@@ -14,4 +14,9 @@ from core.models import Staff, Restaurant, Rating, Sale, Comment
 
 
 def run():
-    pass
+    restaurant = Restaurant.objects.last()
+
+    if restaurant:
+        print(restaurant.name)
+        print(restaurant.nickname)
+        print(restaurant.restaurant_name)

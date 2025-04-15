@@ -57,8 +57,12 @@ class Restaurant(models.Model):
     restaurant_type = models.CharField(
         max_length=2, choices=TypeChoices.choices)
     capacity = models.PositiveSmallIntegerField(null=True)
-    nickname = models.CharField(max_length=100, blank=True, null=True)
+    nickname = models.CharField(max_length=100, default='')
     comments = GenericRelation('Comment', related_query_name='restaurant')
+
+    @property
+    def restaurant_name(self) -> str:
+        return self.nickname or self.name
 
     def __str__(self):
         return self.name
