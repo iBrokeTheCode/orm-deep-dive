@@ -25,6 +25,7 @@
 - Lesson 21: [Django Proxy Models - Customizing Model Behaviour using Proxy Models!](./notes/lesson-21.md)
 - Lesson 22: [Django Model Properties & Methods | @property decorator | get_absolute_url() method](./notes/lesson-22.md)
 - Lesson 23: [GeneratedField in Django 5 - New Django Model Field!](./notes/lesson-23.md)
+- Lesson 24: [Django - Multiple Databases | inspectdb command | Database Routers](./notes/lesson-24.md)
 
 ## Helper
 
